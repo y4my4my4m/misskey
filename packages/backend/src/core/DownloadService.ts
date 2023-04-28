@@ -43,9 +43,16 @@ export class DownloadService {
 		const maxSize = this.config.maxFileSize ?? 262144000;
 
 		const baseURL = new URL(url);
-		const pathname = decodeURIComponent(baseURL.pathname);
-		const urlObj = `${baseURL.protocol}//${baseURL.host}${pathname}`;
-		let filename = baseURL.pathname.split('/').pop() ?? 'untitled';
+		const pathname = baseURL.pathname;
+		const extensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.svg', '.blob'];
+		let index = pathname.length;
+		for (const ext of extensions) {
+			const extIndex = pathname.indexOf(ext);
+			if (extIndex !== -1 && extIndex < index) {
+				index = extIndex;
+			}
+		}
+		const urlObj = `${baseURL.protocol}//${baseURL.host}${pathname.substring(0, index + 4)}`;
 
 		const req = got.stream(url, {
 			headers: {
