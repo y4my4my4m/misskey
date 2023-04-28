@@ -42,8 +42,10 @@ export class DownloadService {
 		const operationTimeout = 60 * 1000;
 		const maxSize = this.config.maxFileSize ?? 262144000;
 
-		const urlObj = new URL(url);
-		let filename = urlObj.pathname.split('/').pop() ?? 'untitled';
+		const baseURL = new URL(url);
+		const pathname = decodeURIComponent(baseURL.pathname);
+		const urlObj = `${baseURL.protocol}//${baseURL.host}${pathname}`;
+		let filename = baseURL.pathname.split('/').pop() ?? 'untitled';
 
 		const req = got.stream(url, {
 			headers: {
