@@ -54,6 +54,8 @@ export class DownloadService {
 		}
 		const urlObj = `${baseURL.protocol}//${baseURL.host}${pathname.substring(0, index + 4)}`;
 
+		let filename = baseURL.pathname.split('/').pop() ?? 'untitled';
+
 		const req = got.stream(url, {
 			headers: {
 				'User-Agent': this.config.userAgent,
